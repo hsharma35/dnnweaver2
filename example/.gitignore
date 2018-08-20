@@ -1,0 +1,17 @@
+.DS_Store
+env.*
+*.weights
+*.settings
+*.swp
+*.npy
+*.swo
+__pycache__
+*.pyc
+*.pickle
+inst.bin
+yolo2-tiny.tf.graph
+test_data
+*.swn
+darknet
+.ipynb_checkpoints
+bbox-test.jpg
