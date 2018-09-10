@@ -1,0 +1,6 @@
+performance
+reg_rw
+hs_read_cl_control
+dma_to_device
+dma_from_device
+*.o

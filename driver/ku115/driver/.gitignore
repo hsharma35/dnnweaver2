@@ -1,0 +1,6 @@
+*.o*
+.xdma*.cmd
+xdma.ko
+.tmp_versions/xdma.mod
+Module.symvers
+xdma.mod.c

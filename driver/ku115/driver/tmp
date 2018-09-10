@@ -1,0 +1,104 @@
+./.xdma-sgm.o.cmd:    $(wildcard include/config/control.h) \
+./.xdma-sgm.o.cmd:    $(wildcard include/config/tdp/control.h) \
+./.xdma-ioctl.o.cmd:    $(wildcard include/config/control.h) \
+./.xdma-ioctl.o.cmd:    $(wildcard include/config/tdp/control.h) \
+Binary file ./xdma.o matches
+./xdma-core.c:MODULE_PARM_DESC(enable_credit_mp, "Set 1 to enable creidt feature, default is 0 (no credit control)");
+./xdma-core.c:	NODE_PREFIX "%d_control",
+./xdma-core.c:static void xdma_desc_control(struct xdma_desc *first, u32 control_field);
+./xdma-core.c:static void xdma_desc_control_clear(struct xdma_desc *first, u32 clear_mask);
+./xdma-core.c:static void xdma_desc_control_set(struct xdma_desc *first, u32 set_mask);
+./xdma-core.c:static void transfer_set_all_control(struct xdma_transfer *transfer,
+./xdma-core.c:		u32 control);
+./xdma-core.c: * character device file operations for control bus (through control bridge)
+./xdma-core.c:/* read_interrupts -- Print the interrupt controller status */
+./xdma-core.c:	xdma_desc_control(transfer->desc_virt, 0);
+./xdma-core.c:	w = read_register(&engine->regs->control);
+./xdma-core.c:	dbg_tfr("ioread32(0x%p) returned 0x%08x (control)\n",
+./xdma-core.c:		&engine->regs->control, w);
+./xdma-core.c:			engine->name, w, (u32 *)&engine->regs->control);
+./xdma-core.c:	write_register(w, &engine->regs->control);
+./xdma-core.c:			xdma_desc_control(
+./xdma-core.c:	/* write control register of SG DMA engine */
+./xdma-core.c:	dbg_tfr("iowrite32(0x%08x to 0x%p) (control)\n", w,
+./xdma-core.c:			(void *)&engine->regs->control);
+./xdma-core.c:	write_register(w, &engine->regs->control);
+./xdma-core.c:	printk(KERN_WARNING "Set engine controller enable mask: 0x%08x.\n", w);
+./xdma-core.c:		/* Try to identify BAR as XDMA control BAR */
+./xdma-core.c:		"magic|extra_adjacent|control", "bytes", "src_addr_lo",
+./xdma-core.c:	u32 temp_control;
+./xdma-core.c:	/* create singly-linked list for SG DMA controller */
+./xdma-core.c:		temp_control = DESC_MAGIC | (extra_adj << 8);
+./xdma-core.c:		temp_control |= INSERT_DESC_COUNT(i);
+./xdma-core.c:		desc_virt[i].control = cpu_to_le32(temp_control);
+./xdma-core.c:	temp_control = DESC_MAGIC;
+./xdma-core.c:	temp_control |= INSERT_DESC_COUNT(i);
+./xdma-core.c:	desc_virt[i].control = cpu_to_le32(temp_control);
+./xdma-core.c:	 * remember reserved control in first descriptor, but zero
+./xdma-core.c:	u32 control = le32_to_cpu(first->control) & 0x0000f0ffUL;
+./xdma-core.c:	/* merge magic, extra_adjacent and control field */
+./xdma-core.c:	control |= DESC_MAGIC;
+./xdma-core.c:	first->control = cpu_to_le32(control);
+./xdma-core.c:	/* remember reserved and control bits */
+./xdma-core.c:	u32 control = le32_to_cpu(desc->control) & 0x0000f0ffUL;
+./xdma-core.c:	/* merge adjacent and control field */
+./xdma-core.c:	control |= 0xAD4B0000UL | (extra_adj << 8);
+./xdma-core.c:	/* write control and next_adjacent */
+./xdma-core.c:	desc->control = cpu_to_le32(control);
+./xdma-core.c:/* xdma_desc_control -- Set complete control field of a descriptor. */
+./xdma-core.c:static void xdma_desc_control(struct xdma_desc *first, u32 control_field)
+./xdma-core.c:	u32 control = le32_to_cpu(first->control) & ~(LS_BYTE_MASK);
+./xdma-core.c:	BUG_ON(control_field & ~(LS_BYTE_MASK));
+./xdma-core.c:	/* merge adjacent and control field */
+./xdma-core.c:	control |= control_field;
+./xdma-core.c:	/* write control and next_adjacent */
+./xdma-core.c:	first->control = cpu_to_le32(control);
+./xdma-core.c:/* xdma_desc_clear -- Clear bits in control field of a descriptor. */
+./xdma-core.c:static void xdma_desc_control_clear(struct xdma_desc *first, u32 clear_mask)
+./xdma-core.c:	u32 control = le32_to_cpu(first->control);
+./xdma-core.c:	/* merge adjacent and control field */
+./xdma-core.c:	control &= (~clear_mask);
+./xdma-core.c:	/* write control and next_adjacent */
+./xdma-core.c:	first->control = cpu_to_le32(control);
+./xdma-core.c:/* xdma_desc_clear -- Set bits in control field of a descriptor. */
+./xdma-core.c:static void xdma_desc_control_set(struct xdma_desc *first, u32 set_mask)
+./xdma-core.c:	u32 control = le32_to_cpu(first->control);
+./xdma-core.c:	/* merge adjacent and control field */
+./xdma-core.c:	control |= set_mask;
+./xdma-core.c:	/* write control and next_adjacent */
+./xdma-core.c:	first->control = cpu_to_le32(control);
+./xdma-core.c:static void transfer_set_all_control(struct xdma_transfer *transfer,
+./xdma-core.c:		u32 control)
+./xdma-core.c:		xdma_desc_control_clear(transfer->desc_virt + i, LS_BYTE_MASK);
+./xdma-core.c:		xdma_desc_control_set(transfer->desc_virt + i, control);
+./xdma-core.c:		xdma_desc_control_clear(last->desc_virt + last->desc_num - 1,
+./xdma-core.c: * SG DMA * controller registers.
+./xdma-core.c:	write_register(XDMA_CTRL_NON_INCR_ADDR, &engine->regs->control_w1c);
+./xdma-core.c:	xdma_desc_control(transfer, XDMA_DESC_COMPLETED);
+./xdma-core.c:	u32 control;
+./xdma-core.c:		control = XDMA_DESC_STOPPED;
+./xdma-core.c:		control |= XDMA_DESC_EOP;
+./xdma-core.c:		control |= XDMA_DESC_COMPLETED;
+./xdma-core.c:		xdma_desc_control(transfer->desc_virt + last, control);
+./xdma-core.c:	u32 control;
+./xdma-core.c:		control = XDMA_DESC_STOPPED;
+./xdma-core.c:		control |= XDMA_DESC_EOP;
+./xdma-core.c:		control |= XDMA_DESC_COMPLETED;
+./xdma-core.c:		xdma_desc_control(transfer->desc_virt + last, control);
+./xdma-core.c:* @iocb:       kernel I/O control block
+./xdma-core.c:			write_register(w, &engine->regs->control_w1s);
+./xdma-core.c:			write_register(w, &engine->regs->control_w1c);
+./xdma-core.c:	/* set control of all descriptors */
+./xdma-core.c:	transfer_set_all_control(engine->rx_transfer_cyclic, w);
+./xdma-core.c:	/* remove control character device */
+./xdma-core.c:	/* initialize control character device */
+./xdma-core.c:/* create_char() -- create a character device interface to data or control bus
+./xdma-core.c: * no engines are specified, the interface is coupled with the control bus.
+./.xdma-bit.o.cmd:    $(wildcard include/config/control.h) \
+./.xdma-bit.o.cmd:    $(wildcard include/config/tdp/control.h) \
+Binary file ./xdma-core.o matches
+./.xdma-core.o.cmd:    $(wildcard include/config/control.h) \
+./.xdma-core.o.cmd:    $(wildcard include/config/tdp/control.h) \
+./.xdma.mod.o.cmd:    $(wildcard include/config/control.h) \
+./.xdma.mod.o.cmd:    $(wildcard include/config/tdp/control.h) \
+Binary file ./xdma.ko matches

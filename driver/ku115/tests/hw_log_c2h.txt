@@ -1,0 +1,119 @@
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 64 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00000040
+device = /dev/xdma0_c2h_0, size = 0x00000040, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 128 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00000080
+device = /dev/xdma0_c2h_0, size = 0x00000080, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 256 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00000100
+device = /dev/xdma0_c2h_0, size = 0x00000100, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 512 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00000200
+device = /dev/xdma0_c2h_0, size = 0x00000200, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 1024 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00000400
+device = /dev/xdma0_c2h_0, size = 0x00000400, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 2048 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00000800
+device = /dev/xdma0_c2h_0, size = 0x00000800, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 4096 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00001000
+device = /dev/xdma0_c2h_0, size = 0x00001000, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 8192 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00002000
+device = /dev/xdma0_c2h_0, size = 0x00002000, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 16384 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00004000
+device = /dev/xdma0_c2h_0, size = 0x00004000, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 32768 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00008000
+device = /dev/xdma0_c2h_0, size = 0x00008000, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 65536 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00010000
+device = /dev/xdma0_c2h_0, size = 0x00010000, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 131072 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00020000
+device = /dev/xdma0_c2h_0, size = 0x00020000, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 262144 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00040000
+device = /dev/xdma0_c2h_0, size = 0x00040000, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 524288 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00080000
+device = /dev/xdma0_c2h_0, size = 0x00080000, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 1048576 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00100000
+device = /dev/xdma0_c2h_0, size = 0x00100000, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 2097152 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00200000
+device = /dev/xdma0_c2h_0, size = 0x00200000, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
+** HW C2H = /dev/xdma0_c2h_0 bytecount = 4194304 and iteration = 1
+'/dev/xdma0_c2h_0'
+sscanf() = 1, value = 0x00000001
+ count = 1
+sscanf() = 1, value = 0x00400000
+device = /dev/xdma0_c2h_0, size = 0x00400000, count = 1
+FAILURE: Could not open /dev/xdma0_c2h_0. Make sure xdma device driver is loaded and you have access rights (maybe use sudo?).
