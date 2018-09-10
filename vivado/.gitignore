@@ -1,0 +1,5 @@
+.Xil
+vivado
+log
+synthesis-output
+Makefile.config
