@@ -7,6 +7,10 @@
       https://drive.google.com/drive/folders/0B1tW_VtY7onidEwyQ2FtQVplWEU
   * tiny-yolo-voc.cfg
       https://github.com/thtrieu/darkflow/blob/master/cfg/tiny-yolo-voc.cfg
+  * yolo2_tiny_dnnweaver2_weights.pickle 
+      https://drive.google.com/open?id=1C4_3lnunikxNMSZydHRYhKD7Zd86PyYL
+  * yolo2_tiny_tf_weights.pickle
+      https://drive.google.com/open?id=10J0CZ8ITNZpP24JwXrhr1kEAtro80k39
 
 3. Locate the files
   * tiny-yolo-voc.weights -> weights/
