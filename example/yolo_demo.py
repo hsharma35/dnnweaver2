@@ -10,7 +10,7 @@ import collections
 from time import time
 from darkflow.net.build import TFNet
 
-from dnn_tf.yolo2_tiny_tf import YOLO2_TINY_TF
+from yolo_tf.yolo2_tiny_tf import YOLO2_TINY_TF
 from dnn_fpga import dnn_fpga
 
 def get_bbox(tfnet, box_input, h, w):
