@@ -13,4 +13,4 @@
   * tiny-yolo-voc.cfg -> conf/
 
 4. Run
-  * PYTHONPATH=:.. python yolo_demo.py test.jpg weights/yolo2_tiny_tf_weights.pickle weights/yolo2_tiny_dnnweaver2_weights.pickle
+  * sudo PYTHONPATH=:.. python yolo_demo.py test.jpg weights/yolo2_tiny_tf_weights.pickle weights/yolo2_tiny_dnnweaver2_weights.pickle

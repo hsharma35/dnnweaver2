@@ -2,3 +2,4 @@ inst.bin
 .ipynb_checkpoints
 *.pyc
 .cache.mk
+flex*.log

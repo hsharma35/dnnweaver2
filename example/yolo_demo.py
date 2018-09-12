@@ -108,7 +108,6 @@ def main():
     fpga_touts, fxp_fpga_touts = run_fpga(fpga_tin, bf_weight_pickle)
 
     for key in fpga_touts.keys():
-        print(key)
         my_o = my_touts[key]
         fpga_o, fpga_fps, fpga_inference_time = fpga_touts[key]
         print "layer ~" + str(key) + ": nrmse = %.8f%%\tFPS: %.1f\tInference time: %.2f sec" % (((np.sqrt(np.mean((my_o - fpga_o) ** 2))) / (my_o.max() - my_o.min()) * 100) ,fpga_fps,fpga_inference_time)
@@ -119,7 +118,7 @@ def main():
     for det in result:
         label, l, r, t, b = det['label'], det['topleft']['x'], det['bottomright']['x'], det['topleft']['y'], det['bottomright']['y']
         cv2.rectangle(input_im, (l, b), (r, t), (0, 255, 0), 2)
-        cv2.putText(input_im, label, (l, b), font, 1, (255, 255, 255), 2, cv2.CV_AA)
+        cv2.putText(input_im, label, (l, b), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
 
     cv2.imwrite(os.path.join(os.path.dirname(input_png), "bbox-" + os.path.basename(input_png)), input_im)
 
