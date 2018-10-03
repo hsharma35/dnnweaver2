@@ -110,13 +110,13 @@ class Convolution(NodeOp):
         for i in range(len(self.data.shape)-3):
             num *= self.data.shape[i]
 
-        cout = self.output_tensors.shape[-3]
-        cin = self.data.shape[-3]
-        hout = self.output_tensors.shape[-2]
-        wout = self.output_tensors.shape[-1]
+        cout = self.output_tensors.shape[-1]
+        cin = self.data.shape[-1]
+        hout = self.output_tensors.shape[-3]
+        wout = self.output_tensors.shape[-2]
 
-        hfil = self.weights.shape[-2]
-        wfil = self.weights.shape[-1]
+        hfil = self.weights.shape[-3]
+        wfil = self.weights.shape[-2]
 
         mac = (wfil * hfil * cin * \
                 cout * hout * wout * \
@@ -158,7 +158,7 @@ class ConvolutionBackprop(GradOp):
         self.group = group
 
 
-        super(ConvolutionBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(ConvolutionBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data.shape
@@ -212,7 +212,7 @@ class ConvolutionGradient(GradOp):
         if dtype is None:
             dtype = self.graph.grad_dtype
 
-        super(ConvolutionGradient, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(ConvolutionGradient, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.weights.shape
@@ -347,7 +347,7 @@ class MaxPoolBackprop(GradOp):
         if dtype is None:
             dtype = self.output_loss.dtype
         self.dtype=dtype
-        super(MaxPoolBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(MaxPoolBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data.shape
@@ -372,16 +372,13 @@ class MaxPoolBackprop(GradOp):
         return {Ops.CMP(dtypes): CMP}
 
 class Flatten(NodeOp):
-    def __init__(self, data, node_name, dtype=None):
+    def __init__(self, data, node_name):
 
         # Input data >3D
         self.data = data
 
         input_tensors = data
-        if dtype is None:
-            dtype = data.dtype
-        self.dtype=dtype
-        super(Flatten, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(Flatten, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         cout = self.data.shape[-3]
@@ -402,6 +399,9 @@ class Flatten(NodeOp):
         assert x in self.input_tensors, 'Op: {}, x: {}'.format(self.name, x.name)
         return self.input_loss[0]
 
+    def _get_output_dtype(self):
+        return self.data.dtype
+
     def get_ops(self):
         return {}
 
@@ -412,7 +412,7 @@ class FlattenBackprop(GradOp):
         input_tensors = (self.output_loss)
         node_name = self.data.name + '-backprop'
         self.dtype=dtype
-        super(FlattenBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(FlattenBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data.shape
@@ -438,10 +438,10 @@ class Concat(NodeOp):
         self.concat_dim = concat_dim
 
         if dtype is None:
-            dtype = data.dtype
+            dtype = data[0].dtype
 
         self.dtype=dtype
-        super(Concat, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(Concat, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         concat_dim = 0
@@ -454,6 +454,9 @@ class Concat(NodeOp):
             else:
                 out_shape.append(self.data[0].shape[i])
         return tuple(out_shape)
+
+    def _get_output_dtype(self):
+        return self.data[0].dtype
 
     def _autograd(self, x, y, grad_dtype=FQDtype.FP32):
         self.output_loss = self._get_incoming_gradients(y, grad_dtype=grad_dtype)
@@ -476,7 +479,7 @@ class ConcatBackprop(GradOp):
         input_tensors = (self.output_loss)
         node_name = self.data.name + '-backprop'
         self.dtype=dtype
-        super(ConcatBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(ConcatBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data.shape
@@ -500,10 +503,13 @@ class Add(NodeOp):
             dtype = data[0].dtype
 
         self.dtype=dtype
-        super(Add, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(Add, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data[0].shape
+
+    def _get_output_dtype(self):
+        return self.data[0].dtype
 
     def _autograd(self, x, y, grad_dtype=FQDtype.FP32):
         self.output_loss = self._get_incoming_gradients(y, grad_dtype=grad_dtype)
@@ -526,7 +532,7 @@ class AddBackprop(GradOp):
         input_tensors = (self.output_loss)
         node_name = self.data.name + '-backprop'
         self.dtype=dtype
-        super(AddBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(AddBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data.shape
@@ -535,7 +541,7 @@ class AddBackprop(GradOp):
         return {}
 
 class MatMul(NodeOp):
-    def __init__(self, data, weights, node_name, dtype=None):
+    def __init__(self, data, weights, biases, name, dtype=None):
 
         # Input data >3D
         self.data = data
@@ -543,19 +549,28 @@ class MatMul(NodeOp):
         # Weights data 2D
         self.weights = weights
         assert len(self.weights.shape) == 2
-        assert self.weights.shape[-2] == self.data.shape[-1], 'Dimension mismatch between data ({}) and weights ({})'.format(self.data, self.weights)
+        assert self.weights.shape[-1] == self.data.shape[-1], 'Dimension mismatch between data ({}) and weights ({})'.format(self.data, self.weights)
 
-        input_tensors = (data, weights)
-        self.dtype=dtype
-        super(MatMul, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        # Biases data 2D
+        self.biases = biases
+        assert len(self.biases.shape) == 1
+        assert self.biases.shape[0] == self.weights.shape[-2]
+
+        input_tensors = (data, weights, biases)
+        super(MatMul, self).__init__(node_name=name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
-        cout = self.weights.shape[-1]
+        cout = self.weights.shape[-2]
         out_shape = []
         for i in range(len(self.data.shape)-1):
             out_shape.append(self.data.shape[i])
         out_shape.append(cout)
         return tuple(out_shape)
+
+    def _get_output_dtype(self):
+        total_bits = 64
+        total_frac_bits = self.data.dtype.frac_bits + self.weights.dtype.frac_bits
+        return FixedPoint(total_bits, total_frac_bits)
 
     def _autograd(self, x, y, grad_dtype=FQDtype.FP32):
         self.output_loss = self._get_incoming_gradients(y, grad_dtype=grad_dtype)
@@ -595,8 +610,7 @@ class MatMulBackprop(GradOp):
         self.output_loss = output_loss
         input_tensors = (self.output_loss, self.weights)
         node_name = node_name + '-backprop'
-        self.dtype=dtype
-        super(MatMulBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(MatMulBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data.shape
@@ -624,7 +638,7 @@ class MatMulGradient(GradOp):
         input_tensors = (self.output_loss, self.data)
         node_name = self.weights.name + '-grad'
         self.dtype=dtype
-        super(MatMulGradient, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(MatMulGradient, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.weights.shape
@@ -665,7 +679,7 @@ class AddBias(NodeOp):
 
         input_tensors = (data, weights)
         self.dtype=dtype
-        super(AddBias, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(AddBias, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data.shape
@@ -715,7 +729,7 @@ class AddBiasBackprop(GradOp):
         input_tensors = (output_loss, weights)
         node_name = self.weights.name + '-backprop'
         self.dtype=dtype
-        super(AddBiasBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(AddBiasBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data.shape
@@ -746,7 +760,7 @@ class AddBiasGradient(GradOp):
         input_tensors = (output_loss, data)
         node_name = self.weights.name + '-grad'
         self.dtype=dtype
-        super(AddBiasGradient, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(AddBiasGradient, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.weights.shape
@@ -772,7 +786,7 @@ class GlobalAvgPooling(NodeOp):
         if dtype is None:
             dtype = data.dtype
         self.dtype=dtype
-        super(GlobalAvgPooling, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(GlobalAvgPooling, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         cout = self.data.shape[-3]
@@ -801,7 +815,7 @@ class GlobalAvgPoolingBackprop(GradOp):
         input_tensors = (self.output_loss)
         node_name = self.data.name + '-backprop'
         self.dtype=dtype
-        super(GlobalAvgPoolingBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(GlobalAvgPoolingBackprop, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data.shape
@@ -817,7 +831,7 @@ class AddScalar(NodeOp):
         assert scalar.shape[0] == 1
         input_tensors = (data, scalar)
         self.dtype=dtype
-        super(AddScalar, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(AddScalar, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data.shape
@@ -834,7 +848,7 @@ class MulScalar(NodeOp):
         assert scalar.shape[0] == 1
         input_tensors = (data, scalar)
         self.dtype=dtype
-        super(MulScalar, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(MulScalar, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data.shape
@@ -848,7 +862,7 @@ class InverseTensor(NodeOp):
         self.data = data
         input_tensors = (data)
         self.dtype=dtype
-        super(InverseTensor, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(InverseTensor, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data.shape
@@ -875,7 +889,7 @@ class SubVector(NodeOp):
 
         input_tensors = (data, vector)
         self.dtype=dtype
-        super(SubVector, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(SubVector, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data.shape
@@ -902,7 +916,7 @@ class MulVector(NodeOp):
 
         input_tensors = (data, vector)
         self.dtype=dtype
-        super(MulVector, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(MulVector, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.data.shape
@@ -928,8 +942,12 @@ class LeakyReLU(NodeOp):
         return self.data.dtype
 
     def get_ops(self):
-        raise ValueError
-        return {}
+        mul_dtypes = (self.data.dtype, FixedPoint(16, 15))
+        rshift_dtype = FixedPoint(self.data.dtype.bits + 16, self.data.dtype.frac_bits + 15)
+        cmp_dtypes = (self.data.dtype)
+        return {Ops.MUL(mul_dtypes): self.data.size,
+                Ops.RSHIFT(rshift_dtype): self.data.size,
+                Ops.CMP(cmp_dtypes): self.data.size}
 
 class Maximum(NodeOp):
     def __init__(self, data, node_name, dtype=FQDtype.FP32):
@@ -946,7 +964,7 @@ class Maximum(NodeOp):
 
         input_tensors = data
         self.dtype=dtype
-        super(Maximum, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(Maximum, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         return self.input_tensors[0].shape
@@ -970,7 +988,7 @@ class Reorg(NodeOp):
         if dtype is None:
             dtype = self.data.dtype
         self.dtype=dtype
-        super(Reorg, self).__init__(node_name=node_name, input_tensors=input_tensors, dtype=dtype)
+        super(Reorg, self).__init__(node_name=node_name, input_tensors=input_tensors)
 
     def _get_output_shape(self):
         cout = self.data.shape[-3] * self.reorg_kernel[-1] * self.reorg_kernel[-2]
@@ -1026,8 +1044,10 @@ class BatchNorm(NodeOp):
         return FixedPoint(32, self.data.dtype.frac_bits + self.scale.dtype.frac_bits)
 
     def get_ops(self):
-        raise ValueError
-        return {}
+        ops = self.data.size
+        sub_dtypes = (self.data.dtype, self.mean.dtype)
+        mul_dtypes = (self.data.dtype, self.scale.dtype)
+        return {Ops.SUB(sub_dtypes): ops, Ops.MUL(sub_dtypes): ops}
 
     def load_params(self, params):
         self.mean.data = params["mean"]
@@ -1049,19 +1069,19 @@ def conv2D(i, w, b, name=None, stride=None, pad='SAME', group=1, dtype=None):
     op = Convolution(i, w, b, name, stride=stride, pad=pad, group=group, dtype=dtype)
     return typecast(op.output_tensors, dtype)
 
-def maxPool(i, pooling_kernel, stride=(2,2), pad='VALID', name=None, dtype=None):
+def maxPool(i, pooling_kernel, stride=(1,2,2,1), pad='VALID', name=None, dtype=None):
     g = get_default_graph()
     op = MaxPooling(i, pooling_kernel, name, stride=stride, pad=pad, dtype=dtype)
     return typecast(op.output_tensors, dtype)
 
 def flatten(i, name=None, dtype=None):
     g = get_default_graph()
-    op = Flatten(i, name, dtype=dtype)
+    op = Flatten(i, name)
     return typecast(op.output_tensors, dtype)
 
-def matmul(i, w, name=None, dtype=None):
+def matmul(i, w, b, name=None, dtype=None):
     g = get_default_graph()
-    op = MatMul(i, w, name, dtype=dtype)
+    op = MatMul(i, w, b, name=name, dtype=dtype)
     return typecast(op.output_tensors, dtype)
 
 def concat(data, concat_dim, name=None, dtype=None):

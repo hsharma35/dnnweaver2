@@ -132,6 +132,15 @@ class Graph(object):
         self.op_type_counter[op_type] += 1
         return name
 
+    def get_ops(self):
+        total_ops = {}
+        for opname, op in self.op_registry.iteritems():
+            for op_type, num_ops in op.get_ops().iteritems():
+                if op_type not in total_ops:
+                    total_ops[op_type] = 0
+                total_ops[op_type] += num_ops
+        return total_ops
+
     @contextmanager
     def name_scope(self, name):
         current_scope = self.current_scope

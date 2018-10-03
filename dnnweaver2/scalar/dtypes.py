@@ -33,10 +33,14 @@ class Log(Dtype):
         self.bits = 2
         self.exp_bits = exp_bits
     
-class Binary(Dtype):
+class Binary(FixedPoint):
     def __init__(self):
         self.bits = 1
         self.op_str = 'Binary'
+        self.frac_bits = 0
+        self.int_bits = 1
+    def __str__(self):
+        return 'Binary'
         
 class CustomFloat(Dtype):
     def __init__(self, bits, exp_bits):

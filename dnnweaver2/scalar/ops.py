@@ -23,6 +23,7 @@ class ScalarOpTypes(object):
         self.CmpOp = {}
         self.AddOp = {}
         self.SubOp = {}
+        self.RshiftOp = {}
     def MUL(self, dtypes):
         assert len(dtypes) == 2
         if dtypes not in self.MulOp:
@@ -53,6 +54,11 @@ class ScalarOpTypes(object):
         if dtypes not in self.SubOp:
             self.SubOp[dtypes] = ScalarOp('Subtract', dtypes)
         return self.SubOp[dtypes]
+    def RSHIFT(self, dtypes):
+        assert isinstance(dtypes, Dtype), 'Got Dtypes: {}'.format(dtypes)
+        if dtypes not in self.RshiftOp:
+            self.RshiftOp[dtypes] = ScalarOp('Rshift', dtypes)
+        return self.RshiftOp[dtypes]
 
 
 Ops = ScalarOpTypes()
