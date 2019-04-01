@@ -4,3 +4,7 @@ inst.bin
 .cache.mk
 flex*.log
 *.swp
+.idea/
+example/VOC2007/
+example/ckpt/
+example/yolov2tiny/
