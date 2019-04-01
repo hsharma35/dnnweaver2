@@ -110,7 +110,7 @@ def main():
     for key in fpga_touts.keys():
         my_o = my_touts[key]
         fpga_o, fpga_fps, fpga_inference_time = fpga_touts[key]
-        print "layer ~" + str(key) + ": nrmse = %.8f%%\tFPS: %.1f\tInference time: %.2f sec" % (((np.sqrt(np.mean((my_o - fpga_o) ** 2))) / (my_o.max() - my_o.min()) * 100) ,fpga_fps,fpga_inference_time)
+        print ("layer ~" + str(key) + ": nrmse = %.8f%%\tFPS: %.1f\tInference time: %.2f sec" % (((np.sqrt(np.mean((my_o - fpga_o) ** 2))) / (my_o.max() - my_o.min()) * 100) ,fpga_fps,fpga_inference_time))
 
     result = get_bbox(tfnet, fpga_touts["conv8"][0][0], h, w)
 

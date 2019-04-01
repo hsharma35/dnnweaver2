@@ -362,13 +362,13 @@ class GraphCompiler(object):
                     tile_shape = padded_tile_shape_mapping[buf]
                     stride = np.prod(tile_shape[dim+1:]) * dim_stride
                     if stride >= (1<<16):
-                        raise ValueError, 'stride for inner loop is too high: {}'.format(stride)
+                        raise ValueError('stride for inner loop is too high: {}'.format(stride))
                         # inst_array.append(GenAddrHighInstruction(buf, AccessType.RD, 0, stride).get_binary())
                     inst_array.append(GenAddrLowInstruction(buf, AccessType.RD, 0, stride).get_binary())
                     if tensor.op == conv_op:
                         inst_array.append(GenAddrLowInstruction(buf, AccessType.WR, 0, stride).get_binary())
                         if stride >= (1<<16):
-                            raise ValueError, 'stride for inner loop is too high: {}'.format(stride)
+                            raise ValueError('stride for inner loop is too high: {}'.format(stride))
                             # inst_array.append(GenAddrHighInstruction(buf, AccessType.WR, 0, stride).get_binary())
                 num_inner_loops += 1
 

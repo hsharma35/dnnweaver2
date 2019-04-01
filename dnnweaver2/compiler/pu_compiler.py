@@ -25,7 +25,7 @@ class PUCompiler(object):
             if self.rf[i] == 0:
                 self.rf[i] = 1
                 return i
-        raise ValueError, 'No more registers left'
+        raise ValueError('No more registers left')
 
     def release_reg(self, i):
         self.rf[i] = 0
@@ -314,7 +314,7 @@ class PUCompiler(object):
                     compute_instructions.append(ComputeRshiftImm(src0_addr=dest_reg, imm=shift, dest_addr=dest_reg))
 
                 else:
-                    raise ValueError, 'Not implemented'
+                    raise ValueError('Not implemented')
 
             if pool_reg is None:
                 pool_reg = dest_reg
@@ -365,7 +365,7 @@ class PUCompiler(object):
                 compute_instructions.append(ComputeRshiftImm(src0_addr=dest_reg, imm=shift, dest_addr=dest_reg))
 
             else:
-                raise ValueError, 'Not implemented'
+                raise ValueError('Not implemented')
 
         if dest_reg is not None:
             compute_instructions.append(ComputeNop(src0_addr=dest_reg, dest_addr=8))
