@@ -17,7 +17,12 @@ class YOLO2_TINY_TF(object):
 
     def get_y2t_w(self):
         with open(self.weight_pickle, "rb") as h:
-            y2t_w = pickle.load(h)
+            if "2.7" in sys.version:
+                y2t_w = pickle.load(h)
+            elif "3.5" in sys.version:
+                y2t_w = pickle.load(h, encoding='latin1')
+            else:
+                raise Exception("Unknown python version")
         return y2t_w
 
     def build_graph(self, in_shape):

@@ -110,7 +110,7 @@ def main():
     for key in fpga_touts.keys():
         my_o = my_touts[key]
         fpga_o, fpga_fps, fpga_inference_time = fpga_touts[key]
-        print "layer ~" + str(key) + ": nrmse = %.8f%%\tFPS: %.1f\tInference time: %.2f sec" % (((np.sqrt(np.mean((my_o - fpga_o) ** 2))) / (my_o.max() - my_o.min()) * 100) ,fpga_fps,fpga_inference_time)
+        print ("layer ~" + str(key) + ": nrmse = %.8f%%\tFPS: %.1f\tInference time: %.2f sec" % (((np.sqrt(np.mean((my_o - fpga_o) ** 2))) / (my_o.max() - my_o.min()) * 100) ,fpga_fps,fpga_inference_time))
 
     result = get_bbox(tfnet, fpga_touts["conv8"][0][0], h, w)
 
@@ -118,7 +118,12 @@ def main():
     for det in result:
         label, l, r, t, b = det['label'], det['topleft']['x'], det['bottomright']['x'], det['topleft']['y'], det['bottomright']['y']
         cv2.rectangle(input_im, (l, b), (r, t), (0, 255, 0), 2)
-        cv2.putText(input_im, label, (l, b), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
+        if "4.0.0" in cv2.__version__:
+            cv2.putText(input_im, label, (l, b), font, 1, (255, 255, 255), 2, cv2.LINE_AA)
+        elif "2.4.9.1" in cv2.__version__:
+            cv2.putText(input_im, label, (l, b), font, 1, (255, 255, 255), 2, cv2.CV_AA)
+        else:
+            raise Exception("Unknown cv2 version")
 
     cv2.imwrite(os.path.join(os.path.dirname(input_png), "bbox-" + os.path.basename(input_png)), input_im)
 

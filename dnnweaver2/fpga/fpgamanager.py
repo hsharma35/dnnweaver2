@@ -103,7 +103,7 @@ class FPGAManager(object):
     # TODO: this is not a general impl. Needs to be cleaned up after hotchips.
     def send_input_nparr(self, input_nparr):
         # data
-	op = self.input_op
+        op = self.input_op
         op.data.data = input_nparr
         tin = op.data
         self.log.debug('Sending tensor {} to fpga'.format(op.data))
@@ -115,57 +115,57 @@ class FPGAManager(object):
 
     # TODO: this is not a general impl. Needs to be cleaned up after hotchips.
     def find_sink_op(self, graph):
-        for tname, t in graph.tensor_registry.iteritems():
+        for tname, t in graph.tensor_registry.items():
             if len(t.output_nodes) == 0:
-		self.output_t = t
-		break
+                self.output_t = t
+                break
 
     def get_tout_frac_bits(self):
 #        print str(self.output_t.name) + " " + str(self.output_t.dtype.frac_bits)
         return self.output_t.dtype.frac_bits
 
     def _unpad_tensor(self, t, data):
-	return data[
-		t.fpga_pad[0][0]:t.fpga_pad[0][0]+t.shape[0],
-		t.fpga_pad[1][0]:t.fpga_pad[1][0]+t.shape[1],
-		t.fpga_pad[2][0]:t.fpga_pad[2][0]+t.shape[2],
-		t.fpga_pad[3][0]:t.fpga_pad[3][0]+t.shape[3]
-		]
+        return data[
+                t.fpga_pad[0][0]:t.fpga_pad[0][0]+t.shape[0],
+                t.fpga_pad[1][0]:t.fpga_pad[1][0]+t.shape[1],
+                t.fpga_pad[2][0]:t.fpga_pad[2][0]+t.shape[2],
+                t.fpga_pad[3][0]:t.fpga_pad[3][0]+t.shape[3]
+                ]
 
     # TODO: this is not a general impl. Needs to be cleaned up after hotchips.
     def recv_output_nparr(self):
         t = self.output_t
-	op = self.output_t.op
-	self.log.debug('{}'.format(t))
-	self.log.debug('OP name: {}'.format(op.name))
-	self.log.debug('OP output address: {}'.format(t.fpga_addr))
+        op = self.output_t.op
+        self.log.debug('{}'.format(t))
+        self.log.debug('OP name: {}'.format(op.name))
+        self.log.debug('OP output address: {}'.format(t.fpga_addr))
         got_out_fpga = np.array(array.array('h', self.fpga_memspace.read('ddr', t.fpga_addr, t.fpga_size_in_bytes)), dtype=np.int16).reshape(t.fpga_shape)
         got_out_fpga = self._unpad_tensor(t, got_out_fpga)
-	return got_out_fpga
+        return got_out_fpga
 
     def initialize_graph_tensors(self, graph):
         self.log.debug('Initializing tensors')
-        for tname, t in graph.tensor_registry.iteritems():
+        for tname, t in graph.tensor_registry.items():
             self.log.debug('Tensor {}'.format(t))
-	    if t.dtype.bits == 32:
-		dtype = np.int32
-	    else:
-		dtype = np.int16
-	    if t.op is None:
-		t.data = np.random.randint(0, 16, t.size).astype(dtype).reshape(t.shape) * (1<<4)
-	    else:
-		t.data = np.zeros(t.shape, dtype=dtype)
+            if t.dtype.bits == 32:
+                dtype = np.int32
+            else:
+                dtype = np.int16
+            if t.op is None:
+                t.data = np.random.randint(0, 16, t.size).astype(dtype).reshape(t.shape) * (1<<4)
+            else:
+                t.data = np.zeros(t.shape, dtype=dtype)
             self.log.debug('Tensor initialized with data: \n{}'.format(t.data))
 
     # TODO: this is not a general impl. Needs to be cleaned up after hotchips.
     def initialize_graph(self, graph, array_m, array_n):
         self.log.info('Systolic array: {}x{}'.format(array_n, array_m))
         self.log.info('Initializing graph: {}'.format(graph.name))
-	self.find_sink_op(graph)
+        self.find_sink_op(graph)
         self.log.info('clearing data in DDR')
         self.fpga_memspace.write('ddr', 0, np.zeros((1<<28), dtype=np.int8))
         self.log.info('clearing data in DDR - done!')
-        for opname, op in graph.op_registry.iteritems():
+        for opname, op in graph.op_registry.items():
             if isinstance(op, Convolution):
                 # data
                 if op.data.op is None:
@@ -188,7 +188,7 @@ class FPGAManager(object):
                 self.log.debug('Sending tensor {} to fpga addr {}'.format(tw, tw.fpga_addr))
                 oc, kh, kw, ic = tw.fpga_shape
                 assert oc % array_m == 0
-                tw_data = _pad_tensor(tw).reshape(oc/array_m,array_m,kh,kw,ic)
+                tw_data = _pad_tensor(tw).reshape(int(oc/array_m),array_m,kh,kw,ic)
                 tw_ddr = np.transpose(tw_data, (0,2,3,4,1)).copy()
                 self.fpga_memspace.write('ddr', tw.fpga_addr, tw_ddr)
                 self.log.debug('tensor data: \n{}'.format(tw.data))

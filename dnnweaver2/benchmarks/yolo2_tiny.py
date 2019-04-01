@@ -38,7 +38,7 @@ def yolo_convolution(tensor_in, filters=32, kernel_size=3,
         with get_default_graph().name_scope(act):
             act = bn
     else:
-        raise ValueError, 'Unknown activation type {}'.format(act)
+        raise ValueError('Unknown activation type {}'.format(act))
 
     return act
 
