@@ -3,3 +3,7 @@ inst.bin
 *.pyc
 .cache.mk
 flex*.log
+.idea/
+example/VOC2007/
+example/ckpt/
+example/yolov2tiny/
