@@ -10,6 +10,7 @@ import collections
 from time import time
 from darkflow.net.build import TFNet
 
+sys.path.append('..')
 from yolo_tf.yolo2_tiny_tf import YOLO2_TINY_TF
 from dnn_fpga import dnn_fpga
 
