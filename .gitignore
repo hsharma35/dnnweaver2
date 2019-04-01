@@ -3,3 +3,4 @@ inst.bin
 *.pyc
 .cache.mk
 flex*.log
+*.swp

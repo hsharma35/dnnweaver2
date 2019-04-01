@@ -3,6 +3,13 @@ import mmap
 import os
 import numpy as np
 import array
+import codecs
+
+decode_hex = codecs.getdecoder("hex_codec")
+def to_bytes(n, length, endianess='big'):
+    h = '%x' % n
+    s = decode_hex(('0'*(len(h) % 2) + h).zfill(length*2))[0]
+    return s if endianess == 'big' else s[::-1]
 
 class FPGAMemSpace(object):
     def __init__(self,
@@ -15,7 +22,7 @@ class FPGAMemSpace(object):
 
         self.log.debug('Opening device: {}'.format(pci_cl_ctrl_device))
         self.pci_cl_ctrl_fd = open(pci_cl_ctrl_device, 'r+b', buffering=0)
-        self.pci_cl_ctrl_mmap = mmap.mmap(self.pci_cl_ctrl_fd.fileno(), 32*1024)
+        self.pci_cl_ctrl_mmap = mmap.mmap(self.pci_cl_ctrl_fd.fileno(), 32*1024, prot=mmap.PROT_READ|mmap.PROT_WRITE)
 
         self.log.debug('Opening device: {}'.format(h2c_dma_device))
         self.h2c_fd = os.open(h2c_dma_device, os.O_RDWR)
@@ -30,7 +37,7 @@ class FPGAMemSpace(object):
 
         if namespace == 'pci_cl_ctrl':
             self.pci_cl_ctrl_mmap.seek(addr)
-            self.pci_cl_ctrl_mmap.write(bytes(data))
+            self.pci_cl_ctrl_mmap.write(to_bytes(data, 4, 'little'))
         elif namespace == 'pci_cl_data':
             os.lseek(self.h2c_fd, addr+self.inst_buffer_addr, 0)
             os.write(self.h2c_fd, data)
