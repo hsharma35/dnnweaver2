@@ -1,6 +1,7 @@
 import logging
 import pickle
 import os
+import sys
 
 from graphviz import Digraph
 from collections import OrderedDict, deque
@@ -38,9 +39,9 @@ class Graph(object):
     def get_dot(self):
         dot = Digraph()
         dot_node_dict = {}
-        for opname, op in self.op_registry.iteritems():
+        for opname, op in self.op_registry.items():
             dot_node_dict[op] = '{}\nshape={}\ndtype={}'.format(opname, op.output_tensors.shape, op.output_tensors.dtype)
-        for opname, op in self.op_registry.iteritems():            
+        for opname, op in self.op_registry.items():            
             is_sink = len(op.output_tensors.output_nodes) == 0
             if is_sink:
                 dot.node(dot_node_dict[op], fillcolor='pink', style='filled')
@@ -134,8 +135,8 @@ class Graph(object):
 
     def get_ops(self):
         total_ops = {}
-        for opname, op in self.op_registry.iteritems():
-            for op_type, num_ops in op.get_ops().iteritems():
+        for opname, op in self.op_registry.items():
+            for op_type, num_ops in op.get_ops().items():
                 if op_type not in total_ops:
                     total_ops[op_type] = 0
                 total_ops[op_type] += num_ops
@@ -161,10 +162,10 @@ class Graph(object):
     def print_ops(self):
         total_ops = {}
         g = self
-        for key, op in g.op_registry.iteritems():
+        for key, op in g.op_registry.items():
             sub_ops = op.get_ops()
             if len(sub_ops.keys()) > 0:
-                for op, num in sub_ops.iteritems():
+                for op, num in sub_ops.items():
                     sopname = op.__str__()
                     if sopname not in total_ops:
                         total_ops[sopname] = num
@@ -172,7 +173,7 @@ class Graph(object):
                         total_ops[sopname] += num
 
         print('*'*100)
-        for sop, num in total_ops.iteritems():
+        for sop, num in total_ops.items():
             print('{:>80}: {:>20,}'.format(sop, num))
             
     def benchmark_tf(self, phase='forward+backward', csv_file='gpu_baseline.csv'):
@@ -216,7 +217,12 @@ class Graph(object):
 
     def load_params_from_pickle(self, pickle_filename):
         with open(pickle_filename, "rb") as h:
-            params = pickle.load(h)
+            if "2.7" in sys.version:
+            	params = pickle.load(h)
+            elif "3.5" in sys.version:
+                params = pickle.load(h, encoding='latin1')
+            else:
+                raise Exception("Unknown python version")
 
         for opname in params.keys():
             if opname in self.op_registry.keys():

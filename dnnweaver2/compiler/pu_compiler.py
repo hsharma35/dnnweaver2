@@ -178,7 +178,7 @@ class PUCompiler(object):
         }
 
         base_addr_loops = 0
-        for loop, it in conv_tiling.iteritems():
+        for loop, it in conv_tiling.items():
             if it[0] > 1 and loop in _pool_tile:
                 if len(pu_ops) > 0:
                     P_B,P_OH,P_OW, P_OC = op.output_tensors.fpga_shape

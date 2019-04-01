@@ -98,7 +98,7 @@ class GraphCompiler(object):
         return best_tiling
 
     def _alloc_tensor(self, graph):
-        for tname, t in graph.tensor_registry.iteritems():
+        for tname, t in graph.tensor_registry.items():
             if isinstance(t, Tensor):
                 self.fpga_manager.alloc(t)
 
@@ -236,10 +236,10 @@ class GraphCompiler(object):
 
         #outer_loops
         num_outer_loops = 0
-        for l, it in tiling.iteritems():
+        for l, it in tiling.items():
             if it[0] > 1:
                 inst_array.append(LoopInstruction(16, 16, it[0]-1).get_binary())
-                for buf, s in outer_loop_strides[l].iteritems():
+                for buf, s in outer_loop_strides[l].items():
                     dim, dim_stride = s
                     tensor = tensor_mapping[buf]
                     shape = tensor_tile_shape[buf]
@@ -256,7 +256,7 @@ class GraphCompiler(object):
 
         if num_outer_loops == 0:
             inst_array.append(LoopInstruction(16, 16, 0).get_binary())
-            for buf, s in outer_loop_strides[l].iteritems():
+            for buf, s in outer_loop_strides[l].items():
                 tensor = tensor_mapping[buf]
                 inst_array.append(GenAddrLowInstruction(buf, AccessType.LD, 16, 0).get_binary())
                 if tensor.op == conv_op:
@@ -276,7 +276,7 @@ class GraphCompiler(object):
         }
 
         #memory_access_loops
-        for buf, tile_shape in padded_tile_shape_mapping.iteritems():
+        for buf, tile_shape in padded_tile_shape_mapping.items():
             num_loops = 0
             tensor = tensor_mapping[buf]
             inst_array.append(LDMemInstruction(buf, tensor.dtype.bits//8, buf+1, 1).get_binary())
@@ -356,7 +356,7 @@ class GraphCompiler(object):
 
             if it > 1:
                 inst_array.append(LoopInstruction(0, 0, it-1).get_binary())
-                for buf, s in inner_loop_strides[l].iteritems():
+                for buf, s in inner_loop_strides[l].items():
                     dim, dim_stride = s
                     tensor = tensor_mapping[buf]
                     tile_shape = padded_tile_shape_mapping[buf]
@@ -401,7 +401,7 @@ class GraphCompiler(object):
         self.log.debug('Combining graph ops to create macro op')
         macro_node_array = []
         curr_node = None
-        for opname, op in graph.op_registry.iteritems():
+        for opname, op in graph.op_registry.items():
             self.log.debug('\t{}'.format(opname))
             if isinstance(op, Convolution):
                 if curr_node is None:
@@ -471,7 +471,7 @@ class GraphCompiler(object):
             self.conv_tiling[macro_node.sys_array_op] = optimal_tiling
             self.log.debug('Optimal tiling and ordering:')
             indent = 1
-            for loop, tile in optimal_tiling.iteritems():
+            for loop, tile in optimal_tiling.items():
                 self.log.debug('{}Loop: {:>6}, Tile: {}'.format(indent * '==', loop, tile))
                 indent += 1
 

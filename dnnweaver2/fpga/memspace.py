@@ -14,7 +14,7 @@ class FPGAMemSpace(object):
         self.log.setLevel(log_level)
 
         self.log.debug('Opening device: {}'.format(pci_cl_ctrl_device))
-        self.pci_cl_ctrl_fd = open(pci_cl_ctrl_device, 'r+b')
+        self.pci_cl_ctrl_fd = open(pci_cl_ctrl_device, 'r+b', buffering=0)
         self.pci_cl_ctrl_mmap = mmap.mmap(self.pci_cl_ctrl_fd.fileno(), 32*1024)
 
         self.log.debug('Opening device: {}'.format(h2c_dma_device))
@@ -46,6 +46,8 @@ class FPGAMemSpace(object):
         if namespace == 'pci_cl_ctrl':
             self.pci_cl_ctrl_mmap.seek(addr)
             v = self.pci_cl_ctrl_mmap.read(4)
+            if isinstance(v, bytes):
+                v = v.decode('utf-8')
             v = '0x'+''.join([hex(ord(i))[2:].zfill(2) for i in reversed(v)])
             return int(v, 16)
         elif namespace == 'pci_cl_data':
@@ -54,5 +56,5 @@ class FPGAMemSpace(object):
         else:
             self.log.debug('Reading tensor of size {} Bytes from address {}'.format(size, addr))
             os.lseek(self.c2h_fd, addr, 0)
-            return os.read(self.c2h_fd, size)
+            return os.read(self.c2h_fd, int(size))
 

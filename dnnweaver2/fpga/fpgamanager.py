@@ -115,7 +115,7 @@ class FPGAManager(object):
 
     # TODO: this is not a general impl. Needs to be cleaned up after hotchips.
     def find_sink_op(self, graph):
-        for tname, t in graph.tensor_registry.iteritems():
+        for tname, t in graph.tensor_registry.items():
             if len(t.output_nodes) == 0:
                 self.output_t = t
                 break
@@ -145,7 +145,7 @@ class FPGAManager(object):
 
     def initialize_graph_tensors(self, graph):
         self.log.debug('Initializing tensors')
-        for tname, t in graph.tensor_registry.iteritems():
+        for tname, t in graph.tensor_registry.items():
             self.log.debug('Tensor {}'.format(t))
             if t.dtype.bits == 32:
                 dtype = np.int32
@@ -165,7 +165,7 @@ class FPGAManager(object):
         self.log.info('clearing data in DDR')
         self.fpga_memspace.write('ddr', 0, np.zeros((1<<28), dtype=np.int8))
         self.log.info('clearing data in DDR - done!')
-        for opname, op in graph.op_registry.iteritems():
+        for opname, op in graph.op_registry.items():
             if isinstance(op, Convolution):
                 # data
                 if op.data.op is None:
@@ -188,7 +188,7 @@ class FPGAManager(object):
                 self.log.debug('Sending tensor {} to fpga addr {}'.format(tw, tw.fpga_addr))
                 oc, kh, kw, ic = tw.fpga_shape
                 assert oc % array_m == 0
-                tw_data = _pad_tensor(tw).reshape(oc/array_m,array_m,kh,kw,ic)
+                tw_data = _pad_tensor(tw).reshape(int(oc/array_m),array_m,kh,kw,ic)
                 tw_ddr = np.transpose(tw_data, (0,2,3,4,1)).copy()
                 self.fpga_memspace.write('ddr', tw.fpga_addr, tw_ddr)
                 self.log.debug('tensor data: \n{}'.format(tw.data))
