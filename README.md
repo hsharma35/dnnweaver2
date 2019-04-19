@@ -1,4 +1,5 @@
-#DnnWeaver v2.0
+# DnnWeaver v2.0
+
 **DnnWeaver v2.0** is an open-source framework for accelerating Deep Neural Networks (DNNs) on FPGAs.
 
 ## Citing us
