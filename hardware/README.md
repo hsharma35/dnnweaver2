@@ -18,7 +18,7 @@ This folder contains the following:
 ### Create a block design  with DDR4, PCIe, and DnnWeaver v2.0
 * Create a new block design called *ku115*
 * Drag and drop Xilinx's DDR1 IP from the board tab to the block design
-* We will also use the DDR1 IP to create a clock for DnnWeaver. To do this, specify 150MHz as the frequency for c0_ddr4_ui_clk by double-clicking the IP and then specifying 150 MHz in the *Advanced Clocking* tab.
+* We will also use the DDR1 IP to create a clock for DnnWeaver. To do this, specify 150MHz as the frequency for addn_ui_clkout1 by double-clicking the IP and then specifying 150 MHz for Clock 1 in the *Advanced Clocking* tab.
 * Drag and drop "FPGA Resetn” from the board tab into the block design. Note that the polarity of *FPGA Resetn* is active low, while DDR IP needs active high reset. Instantiate *Utility Vector Logic* IP by right-clicking the block design, selecting *add-ip*, and then selecting *Utility Vector Logic* IP. Set C_SIZE to 1 and C_Operation to *NOT*.  This will create a *not* gate. Connect the board resetn to the input of the not gate and connect the output to *sys_rst* of the DDR IP.
 * The block design should now look like this:
 ![bd-ddr](/hardware/dnnweaver-synth-pics/block-design-ddr-only.png)
