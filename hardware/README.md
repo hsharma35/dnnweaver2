@@ -30,7 +30,7 @@ This folder contains the following:
 ![bd-automation](/hardware/dnnweaver-synth-pics/block-automation.png)
 
 * Right click block design and add module, search for *cl_wrapper*. This is the top-level module for DnnWeaver v2.0 RTL.
-* Connect the c0_ddr4_ui_clk to cl_wrapper’s clk port
+* Connect the addn_ui_clkout1 to cl_wrapper’s clk port
 * Run connection automation  and connect the M_AXI_LITE of the xdma with pci_cl_ctrl
 * Run connection automation  and connect the M_AXI of the xdma with pci_cl_data and DDR’s C0_DDR4_s_AXI
 * Run connection automation  and connect the cl_ddr0-4 of the cl_wrapper with the DDR as well
